@@ -2,7 +2,7 @@ from pathlib import Path
 import re 
 import numpy as np
 import itertools
-from collections import Counter 
+from tqdm import tqdm
 
 def parse_sequences(text):
     pattern_pos = r">Positive.*\n([A|T|C|G|a|t|c|g]*)"
@@ -68,12 +68,12 @@ if __name__ == "__main__":
     
     motives, pwm_matrices = load_motives()
     train_dataset_encoded = []
-    for sequence in itertools.islice(train_dataset,1,3):
+    for sequence in tqdm(train_dataset):
         train_dataset_encoded.append((motif_frequency(pwm_matrices, sequence)))
     np.savez("data/GM12878_encoded", data=train_dataset_encoded, labels=train_labels)
 
     independent_dataset_encoded = []
-    for sequence in itertools.islice(independent_dataset,1,3):
+    for sequence in tqdm(independent_dataset):
         independent_dataset_encoded.append((motif_frequency(pwm_matrices, sequence)))
     np.savez("data/GM128-Ind_encoded", data=independent_dataset_encoded, labels=ind_labels)
     
