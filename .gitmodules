@@ -1,0 +1,3 @@
+[submodule "Enhancer-MDLF"]
+	path = Enhancer-MDLF
+	url = https://github.com/HaoWuLab-Bioinformatics/Enhancer-MDLF.git
