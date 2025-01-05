@@ -19,8 +19,8 @@ def normalize(Vcount, cell_line, train_or_test):
 
 def load_data(cell_line):
     # TODO: CHANGE TO TRAIN
-    x_train = normalize(np.loadtxt("./motif_data/" + cell_line + "_test_motif.txt"), cell_line, "test")
-    y_train = np.loadtxt("./data/"+ cell_line + "_y_test.txt")
+    x_train = normalize(np.loadtxt("./motif_data/" + cell_line + "_train_motif.txt"), cell_line, "train")
+    y_train = np.loadtxt("./data/"+ cell_line + "_y_train.txt")
     x_test= normalize(np.loadtxt("./motif_data/" + cell_line + "_test_motif.txt"), cell_line, "test")
     y_test= np.loadtxt("./data/"+ cell_line + "_y_test.txt")
     assert x_train.shape == (x_train.shape[0], 401)
@@ -33,7 +33,7 @@ def load_data(cell_line):
 if __name__ == "__main__":
     cell_line = "GM12878"
     x_train, y_train, x_test, y_test = load_data(cell_line)
-    print(x_train)
-    print(y_train)
-    print(x_test)
-    print(y_test)
+    print(x_train.shape)
+    print(y_train.shape)
+    print(x_test.shape)
+    print(y_test.shape)
