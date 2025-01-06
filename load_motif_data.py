@@ -12,13 +12,14 @@ def get_length_of_sequence(cell_line, train_or_test):
                 sequence.append(line.upper().strip('\n'))
                 num.append(len(seq))
     return  np.array(num).reshape(-1, 1)
+
+
 def normalize(Vcount, cell_line, train_or_test):
     Ls = get_length_of_sequence(cell_line, train_or_test)
     return Vcount/Ls
     
 
-def load_data(cell_line):
-    # TODO: CHANGE TO TRAIN
+def load_dataset(cell_line):
     x_train = normalize(np.loadtxt("./motif_data/" + cell_line + "_train_motif.txt"), cell_line, "train")
     y_train = np.loadtxt("./data/"+ cell_line + "_y_train.txt")
     x_test= normalize(np.loadtxt("./motif_data/" + cell_line + "_test_motif.txt"), cell_line, "test")
