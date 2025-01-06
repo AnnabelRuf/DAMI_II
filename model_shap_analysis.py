@@ -9,6 +9,7 @@ import shap
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import load_motif_data
 
 
 # Load dataset
@@ -95,15 +96,15 @@ def shap_analysis(model, X_train, output_dir, model_name):
 
 # Main script
 if __name__ == "__main__":
-    file_path = "your_dataset.csv"  # Replace with actual file path
-    target_column = "target"  # Replace with the name of the target column
+    # file_path = "your_dataset.csv"  # Replace with actual file path
+    # target_column = "target"  # Replace with the name of the target column
     output_dir = "model_outputs"  # Directory to save outputs
-
-    # Load data
-    data = load_data(file_path)
+    #
+    # # Load data
+    # data = load_data(file_path)
 
     # Train-test split
-    X_train, X_test, y_train, y_test = split_data(data, target_column)
+    X_train, X_test, y_train, y_test = load_motif_data.load_dataset("GM12878")
 
     # Train and evaluate models
     train_and_evaluate_models(X_train, X_test, y_train, y_test, output_dir)
