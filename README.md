@@ -1,5 +1,6 @@
 # Usage
 ## Dependecies
+All needed dependecies are stored in ````requirements.txt````. To install them, first create a python virtual environment, activate it and install the dependencies from the file.
 #### Linux:
 ````cmd
 python3 -m venv .venv
