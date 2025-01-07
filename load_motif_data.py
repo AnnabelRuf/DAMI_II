@@ -33,7 +33,7 @@ def load_dataset(cell_line):
 
 if __name__ == "__main__":
     cell_line = "GM12878"
-    x_train, y_train, x_test, y_test = load_data(cell_line)
+    x_train, y_train, x_test, y_test = load_dataset(cell_line)
     print(x_train.shape)
     print(y_train.shape)
     print(x_test.shape)
