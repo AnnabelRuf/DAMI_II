@@ -74,6 +74,11 @@ def shap_analysis(model, X_train, output_dir, model_name):
     explainer = shap.Explainer(model, X_train)
     shap_values = explainer(X_train)
 
+    # Save SHAP values to Excel
+    shap_values_df = pd.DataFrame(shap_values.values)
+    shap_values_path = os.path.join(output_dir, f"{model_name}_shap_values.xlsx")
+    shap_values_df.to_excel(shap_values_path, index=False)
+
     # Save SHAP summary plot
     plt.figure()
     shap.summary_plot(shap_values, X_train, show=False)
@@ -88,10 +93,7 @@ def shap_analysis(model, X_train, output_dir, model_name):
     plt.savefig(shap_bar_path)
     plt.close()
 
-    # Save SHAP values to Excel
-    shap_values_df = pd.DataFrame(shap_values.values, columns=X_train.columns)
-    shap_values_path = os.path.join(output_dir, f"{model_name}_shap_values.xlsx")
-    shap_values_df.to_excel(shap_values_path, index=False)
+
 
 
 # Main script
@@ -104,7 +106,7 @@ if __name__ == "__main__":
     # data = load_data(file_path)
 
     # Train-test split
-    X_train, X_test, y_train, y_test = load_motif_data.load_dataset("GM12878")
+    x_train, y_train, x_test, y_test = load_motif_data.load_dataset("GM12878")
 
     # Train and evaluate models
-    train_and_evaluate_models(X_train, X_test, y_train, y_test, output_dir)
+    train_and_evaluate_models(x_train, x_test, y_train, y_test, output_dir)
