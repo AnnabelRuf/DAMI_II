@@ -19,6 +19,7 @@ def load_data(file_path):
     return data
 
 
+
 # Train-test split
 def split_data(data, target_column):
     X = data.drop(columns=[target_column])
@@ -81,10 +82,19 @@ def shap_analysis(model, X_train, output_dir, model_name):
     
     shap_values = explainer(X_train)
 
-    # Handle SHAP values and X_train compatibility
-    if isinstance(X_train, np.ndarray):
-        X_train = pd.DataFrame(X_train, columns=model.feature_names_in_)
+    # Create the output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
     
+    # Save SHAP values as a .npy file for numpy array
+    shap_values_array = np.array([shap_values[i].values for i in range(len(shap_values))])
+    np.save(os.path.join(output_dir, f"{model_name}_shap_values.npy"), shap_values_array)
+
+
+    # Handle SHAP values and X_train compatibility
+    if isinstance(X_train, np.ndarray):        
+        column_names = [f'col{i+1}' for i in range(X_train.shape[1])]
+        X_train = pd.DataFrame(X_train, columns=column_names) #,columns=model.feature_names_in_
+
     # For binary classification, select the SHAP values for class 1
     if shap_values.values.ndim == 3 and shap_values.values.shape[2] == 2:  # Binary classification
         shap_values_binary = shap_values.values[..., 1]  # Use SHAP values for class 1
@@ -118,7 +128,7 @@ if __name__ == "__main__":
     output_dir = "model_outputs"  # Directory to save outputs
 
     # Train-test split
-    X_train, X_test, y_train, y_test = load_motif_data.load_dataset("GM12878")
+    x_train, y_train, x_test, y_test = load_motif_data.load_dataset("GM12878")
 
     # Train and evaluate models
-    train_and_evaluate_models(X_train, X_test, y_train, y_test, output_dir)
+    train_and_evaluate_models(x_train, x_test, y_train, y_test, output_dir)
