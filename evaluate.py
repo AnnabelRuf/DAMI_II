@@ -8,9 +8,9 @@ import os
 
 
 # SHAP analysis
-def shap_analysis(model, X_test, output_dir, model_name):
+def shap_analysis(model, X_test, output_dir, name, config_name):
     # Use predict_proba for SVM
-    if model_name == 'SVM':
+    if name == 'SVM':
         explainer = shap.Explainer(model.predict_proba, X_test, max_evals=2 * X_test.shape[1] + 1)
 
     else:
@@ -24,7 +24,7 @@ def shap_analysis(model, X_test, output_dir, model_name):
     
     # Save SHAP values as a .npy file for numpy array
     shap_values_array = np.array([shap_values[i].values for i in range(len(shap_values))])
-    np.save(os.path.join(output_dir, f"{model_name}_shap_values.npy"), shap_values_array)
+    np.save(os.path.join(output_dir, f"{config_name}_shap_values.npy"), shap_values_array)
 
 
     # Handle SHAP values and X_test compatibility
@@ -40,24 +40,24 @@ def shap_analysis(model, X_test, output_dir, model_name):
 
     # Save SHAP values to Excel
     shap_values_df = pd.DataFrame(shap_values_binary, columns=X_test.columns)
-    shap_values_path = os.path.join(output_dir, f"{model_name}_shap_values.xlsx")
+    shap_values_path = os.path.join(output_dir, f"{config_name}_shap_values.xlsx")
     shap_values_df.to_excel(shap_values_path, index=False)
 
     # SHAP summary plot
     plt.figure()
     shap.summary_plot(shap_values_binary, X_test, show=False)
-    shap_summary_path = os.path.join(output_dir, f"{model_name}_shap_summary_plot.jpg")
+    shap_summary_path = os.path.join(output_dir, f"{config_name}_shap_summary_plot.jpg")
     plt.savefig(shap_summary_path)
     plt.close()
 
     # SHAP bar plot
     plt.figure()
     shap.summary_plot(shap_values_binary, X_test, plot_type="bar", show=False)
-    shap_bar_path = os.path.join(output_dir, f"{model_name}_shap_bar_plot.jpg")
+    shap_bar_path = os.path.join(output_dir, f"{config_name}_shap_bar_plot.jpg")
     plt.savefig(shap_bar_path)
     plt.close()
     
-def evaluate_model(model, name, X_train, X_test, y_test, output_dir):
+def evaluate_model(model, name, config_name, X_train, X_test, y_test, output_dir, sample_size):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         y_pred = model.predict(X_test)
@@ -67,23 +67,24 @@ def evaluate_model(model, name, X_train, X_test, y_test, output_dir):
 
         # Save classification report to Excel
         report_df = pd.DataFrame(report).transpose()
-        report_path = os.path.join(output_dir, f"{name}_classification_report.xlsx")
+        report_path = os.path.join(output_dir, f"{config_name}_classification_report.xlsx")
         report_df.to_excel(report_path, index=True)
 
         # Save confusion matrix plot
         plt.figure(figsize=(8, 6))
         sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=np.unique(y_test),
                     yticklabels=np.unique(y_test))
-        plt.title(f"Confusion Matrix: {name}")
+        plt.title(f"Confusion Matrix: {config_name}")
         plt.xlabel("Predicted")
         plt.ylabel("Actual")
-        plt_path = os.path.join(output_dir, f"{name}_confusion_matrix.png")
+        plt_path = os.path.join(output_dir, f"{config_name}_confusion_matrix.png")
         plt.savefig(plt_path)
         plt.close()
 
         print(f"Model: {name}")
+        print(f"Configuration: {config_name}")
         print(f"Accuracy: {acc}")
         print(classification_report(y_test, y_pred))
 
         # Perform SHAP analysis
-        shap_analysis(model, X_train, output_dir, name)
+        shap_analysis(model, X_train, output_dir, name, config_name)
