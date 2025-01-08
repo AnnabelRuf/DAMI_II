@@ -14,7 +14,9 @@ def shap_analysis(model, X_train, X_test, output_dir, name, config_name, sample_
         X_test = shap.sample(X_test, sample_size, random_state=42)
     # Use predict_proba for SVM
     if name == 'SVM':
-        explainer = shap.KernelExplainer(model.predict_proba, X_train)
+        explainer = shap.Explainer(model.predict_proba, X_train)
+    elif name == "XGB":
+        explainer = shap.TreeExplainer(model, X_train)
     elif name == 'LSTM':
         explainer = shap.DeepExplainer(model=model, data=X_train)
     else:
