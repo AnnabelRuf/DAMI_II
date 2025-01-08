@@ -31,4 +31,4 @@ if __name__ == "__main__":
     # result: {'C': 100, 'gamma': 1, 'kernel': 'rbf'}
     model = SVC(probability=True, C=100, gamma=1, kernel="rbf", random_state=42)
     model.fit(X_train, y_train)
-    evaluate_model(model=model, name="SVM", config_name="C-100_gamma-1_kernel-rbf", X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"SVM_output", sample_size=500)
+    evaluate_model(model=model, name="SVM", config_name="C-100_gamma-1_kernel-rbf", X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"SVM_output", sample_size=100)
