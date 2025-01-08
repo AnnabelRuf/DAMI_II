@@ -14,6 +14,7 @@ if __name__ == "__main__":
     # Model to train and evaluate
     RF_configs = {
         'Standard': RandomForestClassifier(random_state=42),
+        'Best_Config': RandomForestClassifier(random_state=42, n_estimators=50, min_samples_split=2, min_samples_leaf=1, max_features="sqrt", bootstrap=False )
     }
 
 
