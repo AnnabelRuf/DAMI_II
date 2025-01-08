@@ -27,12 +27,8 @@ if __name__ == "__main__":
     X_train, y_train, X_test, y_test = load_dataset("GM12878")
 
     # Model to train and evaluate
-    RF_configs = {
-        'Standard': SVC(probability=True, random_state=42)
-    }
-    grid_search(X_train, y_train, X_test, y_test)
-
-    #for config_name, model in RF_configs.items():
-        #Train model
-        #model.fit(X_train, y_train)
-        #evaluate_model(model=model, name="SVM", config_name=config_name, X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"SVM_output", sample_size=500)
+    #grid_search(X_train, y_train, X_test, y_test)
+    # result: {'C': 100, 'gamma': 1, 'kernel': 'rbf'}
+    model = SVC(probability=True, C=100, gamma=1, kernel="rbf", random_state=42)
+    model.fit(X_train, y_train)
+    evaluate_model(model=model, name="SVM", config_name=config_name, X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"SVM_output", sample_size=500)
