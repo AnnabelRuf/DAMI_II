@@ -1,0 +1,38 @@
+from evaluate import evaluate_model
+from load_motif_data import load_dataset
+
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score, classification_report
+
+def grid_search(X_train, y_train, X_test, y_test):
+    param_grid = {'C': [0.1, 1, 10, 100, 1000],
+              'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+              'kernel': ['rbf','linear']}
+    model = SVC()
+    grid = GridSearchCV(model,param_grid)
+    grid.fit(X_train, y_train)
+    pred = grid.predict(X_test)
+    accuracy_score(y_test, pred)
+    
+    print(classification_report(y_test,pred))
+    print(grid.best_params_)
+    
+
+
+if __name__ == "__main__":
+
+
+    # Train-test split
+    X_train, y_train, X_test, y_test = load_dataset("GM12878")
+
+    # Model to train and evaluate
+    #grid_search(X_train, y_train, X_test, y_test)
+    # result: {'C': 100, 'gamma': 1, 'kernel': 'rbf'}
+    model = SVC(probability=True, C=100, gamma=1, kernel="rbf", random_state=42)
+    model.fit(X_train, y_train)
+<<<<<<< HEAD
+    evaluate_model(model=model, name="SVM", config_name="C-100_gamma-1_kernel-rbf", X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"SVM_output", sample_size=100)
+=======
+    evaluate_model(model=model, name="SVM", config_name="Best_GS", X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"SVM_output", sample_size=500)
+>>>>>>> 9473357494d29ca91769a8a967ca1526080782d1

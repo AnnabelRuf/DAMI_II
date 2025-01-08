@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
-
+import tensorflow as tf
 
 # SHAP analysis
 def shap_analysis(model, X_train, X_test, output_dir, name, config_name, sample_size):
@@ -14,13 +14,17 @@ def shap_analysis(model, X_train, X_test, output_dir, name, config_name, sample_
         X_test = shap.sample(X_test, sample_size, random_state=42)
     # Use predict_proba for SVM
     if name == 'SVM':
-        explainer = shap.KernelExplainer(model.predict_proba, X_train)
+        explainer = shap.Explainer(model.predict_proba, X_train)
+    elif name == "XGB":
+        explainer = shap.TreeExplainer(model, X_train)
+    elif name == "NN":
+        explainer = shap.KernelExplainer(model, X_train)
     elif name == 'LSTM':
-        explainer = shap.DeepExplainer(model=model, data=X_train)
+        explainer = shap.GradientExplainer(model=model, data=X_train)
     else:
         explainer = shap.Explainer(model, X_train)
 
-    shap_values = explainer.shap_values(X_test)
+    shap_values = explainer(X_test)
 
     # Create the output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
@@ -64,8 +68,10 @@ def evaluate_model(model, name, config_name, X_train, X_test, y_test, output_dir
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         y_pred = model.predict(X_test)
-        if name == "LSTM":
+        print(y_pred.shape)
+        if name == "LSTM" or name == "NN":
             y_pred = (y_pred > 0.5).astype(int)
+        print(y_pred.shape)
         acc = accuracy_score(y_test, y_pred)
         report = classification_report(y_test, y_pred, output_dict=True)
         conf_matrix = confusion_matrix(y_test, y_pred)
