@@ -1,0 +1,38 @@
+from evaluate import evaluate_model
+from load_motif_data import load_dataset
+
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score, classification_report
+
+def grid_search(X_train, y_train, X_test, y_test):
+    param_grid = {'C': [0.1, 1, 10, 100, 1000],
+              'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+              'kernel': ['rbf','linear']}
+    model = SVC()
+    grid = GridSearchCV(model,param_grid)
+    grid.fit(X_train, y_train)
+    pred = grid.predict(X_test)
+    accuracy_score(y_test, pred)
+    
+    print(classification_report(y_test,pred))
+    print(grid.best_params_)
+    
+
+
+if __name__ == "__main__":
+
+
+    # Train-test split
+    X_train, y_train, X_test, y_test = load_dataset("GM12878")
+
+    # Model to train and evaluate
+    RF_configs = {
+        'Standard': SVC(probability=True, random_state=42)
+    }
+    grid_search(X_train, y_train, X_test, y_test)
+
+    #for config_name, model in RF_configs.items():
+        #Train model
+        #model.fit(X_train, y_train)
+        #evaluate_model(model=model, name="SVM", config_name=config_name, X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"SVM_output", sample_size=500)
