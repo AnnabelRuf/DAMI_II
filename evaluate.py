@@ -8,16 +8,19 @@ import os
 
 
 # SHAP analysis
-def shap_analysis(model, X_test, output_dir, name, config_name):
+def shap_analysis(model, X_train, X_test, output_dir, name, config_name, sample_size):
+    if sample_size is not None:
+        X_train = shap.sample(X_train, sample_size, random_state=42)
+        X_test = shap.sample(X_test, sample_size, random_state=42)
     # Use predict_proba for SVM
     if name == 'SVM':
-        explainer = shap.Explainer(model.predict_proba, X_test, max_evals=2 * X_test.shape[1] + 1)
-
+        explainer = shap.KernelExplainer(model.predict_proba, X_train)
+    elif name == 'LSTM':
+        explainer = shap.DeepExplainer(model=model, data=X_train)
     else:
-        explainer = shap.Explainer(model, X_test)
+        explainer = shap.Explainer(model, X_train)
 
-    
-    shap_values = explainer(X_test)
+    shap_values = explainer.shap_values(X_test)
 
     # Create the output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
@@ -57,10 +60,12 @@ def shap_analysis(model, X_test, output_dir, name, config_name):
     plt.savefig(shap_bar_path)
     plt.close()
     
-def evaluate_model(model, name, config_name, X_train, X_test, y_test, output_dir, sample_size):
+def evaluate_model(model, name, config_name, X_train, X_test, y_test, output_dir, sample_size=None):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         y_pred = model.predict(X_test)
+        if name == "LSTM":
+            y_pred = (y_pred > 0.5).astype(int)
         acc = accuracy_score(y_test, y_pred)
         report = classification_report(y_test, y_pred, output_dict=True)
         conf_matrix = confusion_matrix(y_test, y_pred)
@@ -87,4 +92,4 @@ def evaluate_model(model, name, config_name, X_train, X_test, y_test, output_dir
         print(classification_report(y_test, y_pred))
 
         # Perform SHAP analysis
-        shap_analysis(model, X_train, output_dir, name, config_name)
+        shap_analysis(model=model, X_train=X_train, X_test=X_test, output_dir=output_dir, name=name, config_name=config_name, sample_size=sample_size)
