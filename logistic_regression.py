@@ -13,7 +13,8 @@ if __name__ == "__main__":
 
     # Model to train and evaluate
     LR_configs = {
-        'Standard' : LogisticRegression(max_iter=1000, random_state=42)
+        'Standard' : LogisticRegression(max_iter=1000, random_state=42),
+        "Best_Config" : LogisticRegression(max_iter=1000, C=100, solver="sag", penalty="l2")
     }
 
 
