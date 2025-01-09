@@ -2,14 +2,14 @@ from evaluate import evaluate_model
 from load_motif_data import load_dataset
 
 from xgboost.sklearn import XGBClassifier
-from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import accuracy_score, classification_report
+import sys
 
 
 
 if __name__ == "__main__":
+    cell_line = sys.argv[1]
     # Train-test split
-    X_train, y_train, X_test, y_test = load_dataset("GM12878")
+    X_train, y_train, X_test, y_test = load_dataset(cell_line)
     model = XGBClassifier()
     LR_configs = {
         'Standard' : XGBClassifier(),

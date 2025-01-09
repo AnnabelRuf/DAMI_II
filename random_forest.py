@@ -2,14 +2,14 @@ from evaluate import evaluate_model
 from load_motif_data import load_dataset
 
 from sklearn.ensemble import RandomForestClassifier
+import sys
 
 
 
 if __name__ == "__main__":
-
-
+    cell_line = sys.argv[1]
     # Train-test split
-    X_train, y_train, X_test, y_test = load_dataset("GM12878")
+    X_train, y_train, X_test, y_test = load_dataset(cell_line)
 
     # Model to train and evaluate
     RF_configs = {
