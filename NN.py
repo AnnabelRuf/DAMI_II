@@ -26,4 +26,4 @@ if __name__ == "__main__":
     # Train-test split
     X_train, y_train, X_test, y_test = load_dataset(cell_line)
     model.fit(X_train,y_train,  epochs = 30, batch_size = 8)
-    evaluate_model(model, "NN", "Standard", X_train, X_test, y_test, output_dir="NN_output", sample_size=500)
+    evaluate_model(model, "NN", "Standard", X_train, X_test, y_test, output_dir=f"NN_output/{cell_line}", sample_size=500)

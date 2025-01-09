@@ -21,4 +21,4 @@ if __name__ == "__main__":
     for config_name, model in RF_configs.items():
         #Train model
         model.fit(X_train, y_train)
-        evaluate_model(model=model, name="RF", config_name=config_name, X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"Random_Forest_output")
+        evaluate_model(model=model, name="RF", config_name=config_name, X_train=X_train, X_test=X_test, y_test=y_test, output_dir=f"Random_Forest_output/{cell_line}")
