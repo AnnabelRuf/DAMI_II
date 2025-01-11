@@ -27,4 +27,4 @@ if __name__ == "__main__":
     X_train, y_train, X_test, y_test = load_dataset(cell_line)
     for name, model in NN_params.items():
         model.fit(X_train,y_train,  epochs = 30, batch_size = 8)
-        evaluate_model(model, "NN", name, X_train, X_test, y_test, output_dir=f"NN_output/{cell_line}", sample_size=500)
+        evaluate_model(model, "NN", name, X_train, X_test, y_test, output_dir=f"NN_output/{cell_line}", sample_size=500, visualize=False)
