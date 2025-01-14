@@ -1,4 +1,4 @@
-import shap
+
 import pandas as pd
 import numpy as np
 import re
@@ -12,6 +12,7 @@ def get_motif_labels():
     return labels
 
 def mean_shap_values(shap_values, n, flatten=False):
+    #print(shap_values.shape)
     if flatten:
         shap_values = shap_values.squeeze(axis=-2)
     abs_shap_values = np.abs(shap_values)
@@ -26,12 +27,10 @@ def mean_shap_values(shap_values, n, flatten=False):
     top_sorted = sorted(zip(top_indices, top_values), key=lambda x: x[1], reverse=True)
     # Create a dictionary with indices as keys and values as the mean values
     top_dict_descending = {labels[int(index)]: round(float(value),3) for index, value in top_sorted}
-    # print as such that it can be added to the table
-    for key,val in top_dict_descending.items():
-        print(f"{key} ({val})")
     return top_dict_descending
 
 def mean_shap_values_binary(shap_values, n):
+    #print(shap_values.shape)
     # Step 1: Compute the absolute values
     abs_shap_values = np.abs(shap_values)
 
@@ -48,11 +47,10 @@ def mean_shap_values_binary(shap_values, n):
     top_sorted = sorted(zip(top_indices, top_values), key=lambda x: x[1], reverse=True)
     # Create a dictionary with indices as keys and values as the mean values
     top_dict_descending = {labels[int(index)]: round(float(value),3) for index, value in top_sorted}
-    # print as such that it can be added to the table
-    for key,val in top_dict_descending.items():
-        print(f"{key} ({val})")
     return top_dict_descending
 if __name__ == "__main__":
     shap_values = np.load("./Random_Forest_output/Best_Config_shap_values.npy")
     #mean_shap_values(shap_values, 10)
-    mean_shap_values_binary(shap_values, 10)
+    top_dict_descending = mean_shap_values_binary(shap_values, 10)
+    for key,val in top_dict_descending.items():
+        print(f"{key} ({val})")
