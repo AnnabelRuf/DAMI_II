@@ -1,3 +1,5 @@
 .venv/
 .idea/
 __pycache__/
+shap_analysis/
+*_output/
