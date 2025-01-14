@@ -19,7 +19,7 @@ def create_model(size_l1, size_l2, size_l3):
 
 if __name__ == "__main__":
     NN_params = {
-        "Small": create_model(128,64,32),
+	"Small": create_model(128,64,32),
         "Big": create_model(256,128,64)
     }
     cell_line = sys.argv[1]
